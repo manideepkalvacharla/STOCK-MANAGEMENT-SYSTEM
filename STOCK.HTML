@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Management System</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    padding:30px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom:20px;
+}
+
+input{
+    width:30%;
+    padding:10px;
+    margin:5px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+button{
+    padding:10px 15px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    color:white;
+}
+
+.add-btn{
+    background:#28a745;
+}
+
+.add-btn:hover{
+    background:#218838;
+}
+
+.delete-btn{
+    background:#dc3545;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+table th{
+    background:#007bff;
+    color:white;
+    padding:12px;
+}
+
+table td{
+    padding:10px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+.summary{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+}
+
+.box{
+    width:48%;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+.box h2{
+    color:#007bff;
+}
+
+.box p{
+    font-size:25px;
+    margin-top:10px;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📦 Stock Management System</h1>
+
+    <div class="card">
+        <input type="text" id="name" placeholder="Product Name">
+        <input type="number" id="qty" placeholder="Quantity">
+        <input type="number" id="price" placeholder="Price">
+        <button class="add-btn" onclick="addStock()">Add Product</button>
+    </div>
+
+    <div class="card">
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total Value</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="stockTable"></tbody>
+        </table>
+    </div>
+
+    <div class="summary">
+        <div class="box">
+            <h2>Total Products</h2>
+            <p id="products">0</p>
+        </div>
+
+        <div class="box">
+            <h2>Total Stock Value</h2>
+            <p id="stockValue">₹0</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+let totalProducts = 0;
+let totalValue = 0;
+
+function addStock(){
+
+    let name = document.getElementById("name").value;
+    let qty = parseInt(document.getElementById("qty").value);
+    let price = parseFloat(document.getElementById("price").value);
+
+    if(name==="" || isNaN(qty) || isNaN(price)){
+        alert("Please enter all details");
+        return;
+    }
+
+    let value = qty * price;
+
+    let table = document.getElementById("stockTable");
+
+    let row = table.insertRow();
+
+    row.insertCell(0).innerHTML = name;
+    row.insertCell(1).innerHTML = qty;
+    row.insertCell(2).innerHTML = "₹" + price;
+    row.insertCell(3).innerHTML = "₹" + value;
+
+    row.insertCell(4).innerHTML =
+    `<button class="delete-btn" onclick="deleteStock(this,${value})">Delete</button>`;
+
+    totalProducts++;
+    totalValue += value;
+
+    document.getElementById("products").innerText = totalProducts;
+    document.getElementById("stockValue").innerText = "₹" + totalValue;
+
+    document.getElementById("name").value="";
+    document.getElementById("qty").value="";
+    document.getElementById("price").value="";
+}
+
+function deleteStock(btn,value){
+
+    btn.parentElement.parentElement.remove();
+
+    totalProducts--;
+    totalValue -= value;
+
+    document.getElementById("products").innerText = totalProducts;
+    document.getElementById("stockValue").innerText = "₹" + totalValue;
+}
+
+</script>
+
+</body>
+</html>
